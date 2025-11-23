@@ -14,6 +14,7 @@ from .scoring import (
 )
 from .similarity import cosine_similarity_matrix
 from .text import extract_query_keywords, extract_tokens, merge_keywords
+from .llm import generate_score_summary
 
 
 def _build_profile_text(profile: ProfileInput) -> str:
@@ -116,11 +117,20 @@ def score_profiles(
             "feasibility_details": feas_detail,
             "embedding_model": model_name,
         }
+
+        summary_text = generate_score_summary(
+            settings=app_settings,
+            user_query=payload.user_query,
+            profile=profile,
+            scores=breakdown,
+            rationale=rationale,
+        )
         results.append(
             ScoreResult(
                 profile=profile,
                 scores=breakdown,
                 rationale=rationale,
+                summary_text=summary_text,
             )
         )
 

@@ -4,6 +4,7 @@ import os
 import logging
 from functools import lru_cache
 from pathlib import Path
+from typing import Optional
 
 try:
     from pydantic_settings import BaseSettings
@@ -36,12 +37,18 @@ if ENV_FILE.exists():
 else:
     logger.warning(f".env file NOT found at: {ENV_FILE}")
 
-# Verify API key is loaded
-env_key_check = os.getenv("CLAUDE_API")
-if env_key_check:
-    logger.info(f"CLAUDE_API found in environment: {env_key_check[:10]}...")
+# Verify API keys are loaded
+env_claude_key = os.getenv("CLAUDE_API")
+if env_claude_key:
+    logger.info(f"CLAUDE_API found in environment: {env_claude_key[:10]}...")
 else:
     logger.warning("CLAUDE_API NOT found in environment after load_dotenv")
+
+env_firecrawl_key = os.getenv("FIRECRAWL_API")
+if env_firecrawl_key:
+    logger.info("FIRECRAWL_API found in environment.")
+else:
+    logger.debug("FIRECRAWL_API not set in environment.")
 
 
 class Settings(BaseSettings):
@@ -49,7 +56,13 @@ class Settings(BaseSettings):
 
     app_name: str = Field("Rizzard AI Microservice", env="APP_NAME")
     debug: bool = Field(False, env="DEBUG")
-    claude_api_key: str | None = Field(None, env="CLAUDE_API")
+    claude_api_key: Optional[str] = Field(None, env="CLAUDE_API")
+    claude_model: str = Field("claude-3-haiku-20240307", env="CLAUDE_MODEL")
+    firecrawl_api_key: Optional[str] = Field(None, env="FIRECRAWL_API")
+    embedding_model_name: str = Field(
+        "sentence-transformers/all-MiniLM-L6-v2",
+        env="EMBEDDING_MODEL_NAME",
+    )
 
     class Config:
         env_file = str(ENV_FILE) if ENV_FILE.exists() else ".env"
@@ -67,10 +80,9 @@ def get_settings() -> Settings:
     if not settings.claude_api_key:
         env_key = os.getenv("CLAUDE_API")
         if env_key:
-            # Manually set it if found in environment
             settings.claude_api_key = env_key
             logger.info(f"Claude API key loaded via fallback: {env_key[:10]}...")
-    
+
     # Log whether API key was loaded (without exposing the full key)
     if settings.claude_api_key:
         logger.info(f"Claude API key loaded: {settings.claude_api_key[:10]}...")
@@ -82,4 +94,17 @@ def get_settings() -> Settings:
             logger.info("CLAUDE_API found in environment variables")
         else:
             logger.warning("CLAUDE_API not found in environment variables either")
+
+    if not settings.firecrawl_api_key:
+        env_firecrawl = os.getenv("FIRECRAWL_API")
+        if env_firecrawl:
+            settings.firecrawl_api_key = env_firecrawl
+            logger.info("Firecrawl API key loaded via fallback environment lookup.")
+
+    if not settings.embedding_model_name:
+        env_embedding = os.getenv("EMBEDDING_MODEL_NAME")
+        if env_embedding:
+            settings.embedding_model_name = env_embedding
+            logger.info("Embedding model name loaded via fallback environment lookup.")
+
     return settings

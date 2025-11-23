@@ -83,6 +83,10 @@ class ScoreResult(BaseModel):
         default_factory=dict,
         description="Optional structured rationale explaining the score components",
     )
+    summary_text: Optional[str] = Field(
+        None,
+        description="Natural-language summary of the match score and rationale",
+    )
 
 
 class ScoreRequest(BaseModel):
