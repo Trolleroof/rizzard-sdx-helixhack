@@ -1,0 +1,32 @@
+"""Application entrypoint for the Rizzard AI FastAPI microservice."""
+
+from fastapi import FastAPI
+
+from .config import Settings, get_settings
+from .routers import email, embed, process_profile, project, score
+
+
+def create_app(settings: Settings | None = None) -> FastAPI:
+    """Application factory used by both local development and production."""
+    app_settings = settings or get_settings()
+
+    app = FastAPI(
+        title="Rizzard AI Microservice",
+        description="FastAPI microservice powering AI/ML features for Rizzard",
+        version="0.1.0",
+    )
+
+    # Attach configuration for runtime access if needed.
+    app.state.settings = app_settings
+
+    # Register API routers.
+    app.include_router(embed.router)
+    app.include_router(score.router)
+    app.include_router(email.router)
+    app.include_router(project.router)
+    app.include_router(process_profile.router)
+
+    return app
+
+
+app = create_app()
