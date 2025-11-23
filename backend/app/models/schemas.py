@@ -165,22 +165,3 @@ class ProcessProfileResponse(BaseModel):
     """Response containing enriched profile data."""
 
     processed: ProcessedProfile
-
-
-class ChatMessage(BaseModel):
-    """A single message in a chat conversation."""
-
-    role: Literal["user", "assistant"] = Field(..., description="Role of the message sender")
-    content: str = Field(..., description="Content of the message")
-
-
-class ChatRequest(BaseModel):
-    """Request payload for chat endpoint."""
-
-    messages: list[ChatMessage] = Field(..., description="Conversation history")
-
-
-class ChatResponse(BaseModel):
-    """Response payload for chat endpoint (non-streaming)."""
-
-    message: ChatMessage = Field(..., description="Assistant's response message")

@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 
 from .config import Settings, get_settings
-from .routers import chat, email, embed, process_profile, project, score
+from .routers import email, embed, process_profile, project, score
 
 
 def create_app(settings: Optional[Settings] = None) -> FastAPI:
@@ -32,7 +32,6 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
     app.state.settings = app_settings
 
     # Register API routers.
-    app.include_router(chat.router)
     app.include_router(embed.router)
     app.include_router(score.router)
     app.include_router(email.router)

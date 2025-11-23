@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import SearchBar from '../components/SearchBar';
 import LoadingSpinner from '../components/LoadingSpinner';
-import Chat from '../components/Chat';
 
 export default function Home() {
   const [isSearching, setIsSearching] = useState(false);
@@ -51,16 +50,6 @@ export default function Home() {
                 </p>
               </div>
             )}
-          </section>
-
-          {/* Chat Section */}
-          <section className="bg-white rounded-lg shadow-sm border border-zinc-200 p-6">
-            <h2 className="text-xl font-semibold text-zinc-900 mb-4">
-              Chat with Claude
-            </h2>
-            <div className="h-[500px]">
-              <Chat />
-            </div>
           </section>
         </div>
       </main>

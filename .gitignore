@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Dependencies
 node_modules/
 /.pnp
@@ -104,40 +103,3 @@ go.work
 .cache/
 .temp/
 
-=======
-# Python
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-*.so
-*.egg
-*.egg-info/
-.eggs/
-build/
-dist/
-
-# Virtual environments
-.env
-.venv
-venv/
-ENV/
-
-# IDE
-.vscode/
-.idea/
-
-# macOS
-.DS_Store
-
-# Logs
-logs/
-*.log
-
-# FastAPI artifacts
-*.sqlite3
-
-# Other
-.cache/
-pytest_cache/
->>>>>>> dc550ea (FastAPI structure with routers defined)
