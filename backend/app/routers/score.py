@@ -1,9 +1,10 @@
 """Scoring endpoints for the Rizzard AI microservice."""
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 
 from ..config import Settings, get_settings
 from ..models.schemas import ScoreRequest, ScoreResponse
+from ..services.match import score_profiles as score_profiles_service
 
 router = APIRouter(prefix="/score", tags=["Scoring"])
 
@@ -15,7 +16,4 @@ async def score_profiles(
 ) -> ScoreResponse:
     """Calculate semantic, compatibility, and feasibility scores for profiles."""
 
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Scoring pipeline not implemented yet.",
-    )
+    return score_profiles_service(payload, settings=settings)

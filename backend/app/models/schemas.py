@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any, Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -24,12 +24,33 @@ class EmbedResponse(BaseModel):
 class ProfileActivitySignals(BaseModel):
     """Structured activity indicators extracted from scrapers."""
 
-    recent_publications: list[str] | None = None
-    news_mentions: list[str] | None = None
-    hiring: bool | None = None
-    last_updated: str | None = Field(
+    recent_publications: Optional[list[str]] = None
+    news_mentions: Optional[list[str]] = None
+    hiring: Optional[bool] = None
+    last_updated: Optional[str] = Field(
         None, description="ISO timestamp of the latest profile update if available"
     )
+
+    def recency_score(self) -> float:
+        """Heuristic readiness score based on available signals (0-1)."""
+        score = 0.0
+        weights = {
+            "recent_publications": 0.4,
+            "news_mentions": 0.3,
+            "hiring": 0.2,
+            "last_updated": 0.1,
+        }
+
+        if self.recent_publications:
+            score += weights["recent_publications"]
+        if self.news_mentions:
+            score += weights["news_mentions"]
+        if self.hiring:
+            score += weights["hiring"]
+        if self.last_updated:
+            score += weights["last_updated"]
+
+        return min(score, 1.0)
 
 
 class ProfileInput(BaseModel):
@@ -37,11 +58,11 @@ class ProfileInput(BaseModel):
 
     profile_id: str = Field(..., description="Unique identifier for the researcher profile")
     name: str = Field(..., description="Researcher full name")
-    title: str | None = Field(None, description="Academic title or role")
-    department: str | None = Field(None, description="Department affiliation")
+    title: Optional[str] = Field(None, description="Academic title or role")
+    department: Optional[str] = Field(None, description="Department affiliation")
     summary: str = Field(..., description="Free-form summary text of the research focus")
     keywords: list[str] = Field(default_factory=list, description="Key topics or methods")
-    activity_signals: ProfileActivitySignals | None = None
+    activity_signals: Optional[ProfileActivitySignals] = None
 
 
 class ScoreBreakdown(BaseModel):
@@ -133,7 +154,7 @@ class ProcessedProfile(BaseModel):
     profile: ProfileInput
     extracted_methods: list[str] = Field(default_factory=list)
     extracted_topics: list[str] = Field(default_factory=list)
-    research_summary: str | None = None
+    research_summary: Optional[str] = None
     love_languages: list[str] = Field(
         default_factory=list,
         description="Communication or collaboration preferences inferred from the profile",

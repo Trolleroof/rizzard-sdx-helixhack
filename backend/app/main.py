@@ -3,11 +3,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from typing import Optional
+
 from .config import Settings, get_settings
 from .routers import chat, email, embed, process_profile, project, score
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
+def create_app(settings: Optional[Settings] = None) -> FastAPI:
     """Application factory used by both local development and production."""
     app_settings = settings or get_settings()
 
