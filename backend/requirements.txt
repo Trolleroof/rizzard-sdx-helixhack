@@ -9,3 +9,5 @@ scikit-learn>=1.5.1
 anthropic>=0.34.0
 requests>=2.32.3
 httpx>=0.27.0
+firecrawl-py>=0.0.13
+helix-py>=0.1.0

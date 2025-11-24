@@ -25,13 +25,22 @@ export default function SearchBar({ onSearch, isLoading = false }: SearchBarProp
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Enter your research interests or project idea..."
-          className="flex-1 px-4 py-3 rounded-lg border border-zinc-300 bg-white text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          className="flex-1 px-4 py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all"
+          style={{
+            borderColor: '#00356B',
+            backgroundColor: '#FFFFFF',
+            color: '#00356B',
+          }}
           disabled={isLoading}
         />
         <button
           type="submit"
           disabled={isLoading || !query.trim()}
-          className="px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-400 disabled:cursor-not-allowed text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="px-6 py-3 rounded-lg font-semibold transition-all focus:outline-none focus:ring-2 disabled:cursor-not-allowed"
+          style={{
+            backgroundColor: isLoading || !query.trim() ? '#00356B50' : '#00356B',
+            color: '#FFFFFF',
+          }}
         >
           {isLoading ? 'Searching...' : 'Search'}
         </button>

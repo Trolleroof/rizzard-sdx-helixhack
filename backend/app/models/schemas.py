@@ -169,3 +169,33 @@ class ProcessProfileResponse(BaseModel):
     """Response containing enriched profile data."""
 
     processed: ProcessedProfile
+
+
+class ScrapeProfessorsRequest(BaseModel):
+    """Request payload for orchestrated professor scraping."""
+
+    urls: list[str] = Field(..., description="Professor profile URLs to scrape")
+    initialize_schema: bool = Field(
+        False,
+        description="Whether to attempt applying the Helix schema before scraping",
+    )
+
+
+class ScrapeProfessorResult(BaseModel):
+    """Outcome for a single scraped professor URL."""
+
+    url: str
+    success: bool
+    helix_id: Optional[str] = None
+    error: Optional[str] = None
+    profile: Optional[ProfileInput] = None
+    embedding_model: Optional[str] = None
+
+
+class ScrapeProfessorsResponse(BaseModel):
+    """Aggregate response for a scrape batch."""
+
+    total: int
+    success_count: int
+    failure_count: int
+    results: list[ScrapeProfessorResult]

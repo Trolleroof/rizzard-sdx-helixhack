@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 
 from .config import Settings, get_settings
-from .routers import email, embed, process_profile, project, score
+from .routers import email, embed, process_profile, profiles, project, score, scrape
 
 
 def create_app(settings: Optional[Settings] = None) -> FastAPI:
@@ -37,6 +37,8 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
     app.include_router(email.router)
     app.include_router(project.router)
     app.include_router(process_profile.router)
+    app.include_router(profiles.router)
+    app.include_router(scrape.router)
 
     return app
 

@@ -63,6 +63,10 @@ class Settings(BaseSettings):
         "sentence-transformers/all-MiniLM-L6-v2",
         env="EMBEDDING_MODEL_NAME",
     )
+    helixdb_local: bool = Field(True, env="HELIXDB_LOCAL")
+    helixdb_verbose: bool = Field(False, env="HELIXDB_VERBOSE")
+    helixdb_endpoint: Optional[str] = Field(None, env="HELIXDB_ENDPOINT")
+    helixdb_api_key: Optional[str] = Field(None, env="HELIXDB_API_KEY")
 
     class Config:
         env_file = str(ENV_FILE) if ENV_FILE.exists() else ".env"
